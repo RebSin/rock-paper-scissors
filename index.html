@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset= "UTF-8">
+        <title>Rock Paper Scissors </title>
+    </head>
+    <body>
+        <script> 
+            function computerPlay () {
+                let theSelector = Math.floor(Math.random() * 2); // returns a random int from 0 to 2
+                let theChoice;
+                switch (true) {
+                    case theSelector == 0:
+                        theChoice = "rock";
+                        break;
+                    case theSelector == 1:
+                        theChoice = "paper";
+                        break;
+                    case theSelector == 2:
+                        theChoice = "scissors";
+                        break;
+                    default:
+                        theChoice = "A selection wasn't made";
+                }  
+                return theChoice;              
+            }
+
+            function playRound (computerSelection, playerSelection) {
+                playersChoice = playerSelection.toLowerCase();
+                let theWinner;
+                if (computerSelection == "rock") {
+                    if (playerSelection == "rock") {
+                        theWinner = "This round was a tie!";
+                    }   
+                    if (playerSelection == "paper") {
+                        theWinner = "The player won this round!";
+                    }   
+                    if (playerSelection == "scissors") {
+                        theWinner = "The computer won this round!";
+                    }   
+                } 
+                else
+                if (computerSelection == "paper") {
+                    if (playerSelection == "rock") {
+                        theWinner = "The computer won this round!";
+                    }   
+                    if (playerSelection == "paper") {
+                        theWinner = "This round was a tie!";
+                    }   
+                    if (playerSelection == "scissors") {
+                        theWinner = "The player won this round!";
+                    }   
+                }
+                else
+                if (computerSelection == "scissors") {
+                    if (playerSelection == "rock") {
+                        theWinner = "The player won this round!";
+                    }   
+                    if (playerSelection == "paper") {
+                        theWinner = "The computer won this round!";
+                    }   
+                    if (playerSelection == "scissors") {
+                        theWinner = "This round was a tie!";
+                    }   
+                }
+                return theWinner;
+            }    
+
+            function game () {
+                let playerCount = 0;
+                let computerCount = 0;
+                let finalMessage;
+
+                for (let i = 0; i < 5; i++) {
+                let playerInput = prompt("What's your move?");
+                    console.log ("You chose " + playerInput + ". The computer chose " + computerPlay());
+                let winnerDetector = playRound (computerPlay(), playerInput);
+                    console.log (winnerDetector);
+
+                    switch (true) {
+                        case winnerDetector == "This round was a tie!":
+                            break;
+                        case winnerDetector == "The computer won this round!":
+                            computerCount++;
+                            break;
+                        case winnerDetector == "The player won this round!":
+                            playerCount++;
+                            break;
+                        default:
+                            theChoice = "A selection wasn't made";
+                    } 
+                    console.log (i);
+
+                    if (i >= 4) {
+                        if (playerCount > computerCount) {
+                            finalMessage = "Great job, you beat the bot by " + (playerCount - computerCount) + " points!";
+                        } 
+                        else if (computerCount > playerCount) {
+                            finalMessage = "Better luck next time buddy, you lost by " + (computerCount - playerCount) + " points.";
+                        } else {
+                            finalMessage = "Not bad. It was a tie. Try again?";
+                        }
+                    }
+                console.log (finalMessage);
+            }
+        }
+
+        console.log (game());
+        </script>
+    </body>
+</html>
