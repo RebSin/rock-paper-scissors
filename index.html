@@ -5,9 +5,37 @@
         <title>Rock Paper Scissors </title>
     </head>
     <body>
+        <div id ="runningScore"></div>
+        <div id ="btnHolder">
+            <button id="rock">Rock</button>
+            <button id="paper">Paper</button>
+            <button id="scissors">Scissors</button>
+        </div>
+        <div id ="results"></div>
+        <div id ="winner"></div>
+
         <script> 
+
+            const runningScore = document.querySelector('#runningScore'); //this is container to display current score
+            const theScore = document.createElement('div');
+
+            const buttons = document.querySelectorAll('button');
+            // we use the .forEach method to iterate through each button
+            buttons.forEach((button) => {
+            // and for each one we add a 'click' listener
+            button.addEventListener('click', (e) => {
+                    playRound(computerPlay(), button.id);
+                });
+            });
+
+            const results = document.querySelector('#results'); //this is the container to display each matches winner
+            const content = document.createElement('div');
+
+            const winner = document.querySelector('#winner'); //this displays final winner
+            const theWin = document.createElement('div');
+
             function computerPlay () {
-                let theSelector = Math.floor(Math.random() * 2); // returns a random int from 0 to 2
+                let theSelector = Math.floor(Math.random() * 3); // returns a random int from 0 to 2
                 let theChoice;
                 switch (true) {
                     case theSelector == 0:
@@ -25,85 +53,112 @@
                 return theChoice;              
             }
 
+            let playerCount = 0;
+            let computerCount = 0;
+
             function playRound (computerSelection, playerSelection) {
-                playersChoice = playerSelection.toLowerCase();
-                let theWinner;
-                if (computerSelection == "rock") {
-                    if (playerSelection == "rock") {
-                        theWinner = "This round was a tie!";
-                    }   
-                    if (playerSelection == "paper") {
-                        theWinner = "The player won this round!";
-                    }   
-                    if (playerSelection == "scissors") {
-                        theWinner = "The computer won this round!";
-                    }   
-                } 
-                else if (computerSelection == "paper") {
-                    if (playerSelection == "rock") {
-                        theWinner = "The computer won this round!";
-                    }   
-                    if (playerSelection == "paper") {
-                        theWinner = "This round was a tie!";
-                    }   
-                    if (playerSelection == "scissors") {
-                        theWinner = "The player won this round!";
-                    }   
-                }
-                else if (computerSelection == "scissors") {
-                    if (playerSelection == "rock") {
-                        theWinner = "The player won this round!";
-                    }   
-                    if (playerSelection == "paper") {
-                        theWinner = "The computer won this round!";
-                    }   
-                    if (playerSelection == "scissors") {
-                        theWinner = "This round was a tie!";
-                    }   
-                }
-                return theWinner;
-            }    
-
-            function game () {
-                let playerCount = 0;
-                let computerCount = 0;
-                let finalMessage;
-
-                for (let i = 0; i < 5; i++) {
-                let playerInput = prompt("What's your move?");
-                    console.log ("You chose " + playerInput + ". The computer chose " + computerPlay());
-                let winnerDetector = playRound (computerPlay(), playerInput);
-                    console.log (winnerDetector);
-
-                    switch (true) {
-                        case winnerDetector == "This round was a tie!":
-                            break;
-                        case winnerDetector == "The computer won this round!":
-                            computerCount++;
-                            break;
-                        case winnerDetector == "The player won this round!":
-                            playerCount++;
-                            break;
-                        default:
-                            theChoice = "A selection wasn't made";
-                    } 
-                    console.log (i);
-
-                    if (i >= 4) {
-                        if (playerCount > computerCount) {
-                            finalMessage = "Great job, you beat the bot by " + (playerCount - computerCount) + " points!";
-                        } 
-                        else if (computerCount > playerCount) {
-                            finalMessage = "Better luck next time buddy, you lost by " + (computerCount - playerCount) + " points.";
-                        } else {
-                            finalMessage = "Not bad. It was a tie. Try again?";
-                        }
+            if (computerSelection == "rock") {
+                if (playerSelection == "rock") {
+                    theWinner = "This round was a tie!";
+                }   
+                if (playerSelection == "paper") {
+                    theWinner = "The player won this round!";
+                    playerCount++;
+                    if (winnerChecker(computerCount, playerCount)) { //this resets the score if there is a winner, to allow for replays. Is not called during ties.
+                        computerCount = 0;
+                        playerCount = 0;
                     }
-                console.log (finalMessage);
-            }
-        }
+                }   
+                if (playerSelection == "scissors") {
+                    theWinner = "The computer won this round!";
+                    computerCount++;
+                    if (winnerChecker(computerCount, playerCount)) {
+                        computerCount = 0;
+                        playerCount = 0;
+                    }
+                }   
+            } else if (computerSelection == "paper") {
+                if (playerSelection == "rock") {
+                    theWinner = "The computer won this round!";
+                    computerCount++;
+                    if (winnerChecker(computerCount, playerCount)) {
+                        computerCount = 0;
+                        playerCount = 0;
+                    }
+                }   
+                if (playerSelection == "paper") {
+                    theWinner = "This round was a tie!";
+                }   
+                if (playerSelection == "scissors") {
+                    theWinner = "The player won this round!";
+                    playerCount++;
+                    if (winnerChecker(computerCount, playerCount)) {
+                        computerCount = 0;
+                        playerCount = 0;
+                    }
+                }   
+            } else if (computerSelection == "scissors") {
+                    if (playerSelection == "rock") {
+                        theWinner = "The player won this round!";
+                        playerCount++;
+                        if (winnerChecker(computerCount, playerCount)) {
+                            computerCount = 0;
+                            playerCount = 0;
+                        }
+                    }   
+                    if (playerSelection == "paper") {
+                        theWinner = "The computer won this round!";
+                        computerCount++;
+                        if (winnerChecker(computerCount, playerCount)) {
+                            computerCount = 0;
+                            playerCount = 0;
+                        }
+                    }   
+                    if (playerSelection == "scissors") {
+                        theWinner = "This round was a tie!";
+                    }
+                } 
+                   
+                content.classList.add('content');
+                content.textContent = theWinner.toString(); //this adds the winner of the round to be appended to the screen
+                results.appendChild(content);    
 
-        console.log (game());
-        </script>
+                theScore.classList.add('theScore');
+                theScore.textContent = "The Computers Score is " + computerCount + " Your score is " + playerCount; //this adds the current score to be appended to the screen
+                runningScore.appendChild(theScore);    
+            }   
+
+            function winnerChecker (computerCount, playerCount) { //this checks if anyone won, and if yes, who. 
+                if (computerCount == 5 && playerCount != 5) {
+                    winnerDialog("computer");
+                    return true;
+                } 
+                if (playerCount == 5 && computerCount !=5) {
+                    winnerDialog("player");
+                    return true;
+                } 
+                if (playerCount == 5 && computerCount == 5){
+                    winnerDialog("tie");
+                    return true;
+                }
+                return false;
+            }
+            
+            function winnerDialog(winner) { //this displays the winning dialog
+                theWin.classList.add('theWin');
+                let endingDialog = "";
+                if (winner == "computer") {
+                    endingDialog = "The computer won. Try to do better next time.";
+                } 
+                if (winner == "player") {
+                    endingDialog = "Hey great job, you won!";
+                }
+                if (winner == "tie") {
+                    endingDialog = "Wow, what a close game. It's a tie!";
+                }
+                theWin.textContent = endingDialog;
+                runningScore.appendChild(theWin);    
+            }
+       </script>
     </body>
 </html>
